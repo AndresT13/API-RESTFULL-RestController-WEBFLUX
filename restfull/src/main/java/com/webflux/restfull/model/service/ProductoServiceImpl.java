@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Service
 public class ProductoServiceImpl implements ProductoService {
 
@@ -22,6 +25,11 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     public Flux<Producto> findAll() {
         return dao.findAll();
+    }
+
+    @Override
+    public Mono<Producto> findByNombre(String nombre) {
+        return dao.findByNombre(nombre);
     }
 
     @Override
@@ -66,4 +74,40 @@ public class ProductoServiceImpl implements ProductoService {
     public Mono<Categoria> saveCategoria(Categoria categoria) {
         return categoriaDAO.save(categoria);
     }
+
+    public Mono<Void> insertarDatosDePrueba() {
+        Categoria categoriaTelevisores = new Categoria("Televisores");
+        List<Producto> productos = Arrays.asList(
+                new Producto("Televisor LG", 1000.0, categoriaTelevisores),
+                new Producto("TV Panasonic Pantalla LCD", 800.0, categoriaTelevisores)
+                // Más productos si es necesario
+        );
+
+        return Flux.fromIterable(productos)
+                .flatMap(producto -> dao.save(producto))
+                .then();
+    }
+
+    @Override
+    public Mono<Categoria> findByCategoriaByNombre(String nombre) {
+        return categoriaDAO.findByNombre(nombre);
+    }
+
+
+    // Método para eliminar todos los productos
+    public Mono<Void> eliminarTodosLosProductos() {
+        return dao.deleteAll();
+    }
+
+    // Método para eliminar todas las categorías
+    public Mono<Void> eliminarTodasLasCategorias() {
+        return categoriaDAO.deleteAll();
+    }
+
+    // Método para limpiar datos
+    public Mono<Void> limpiarDatos() {
+        return eliminarTodosLosProductos()
+                .then(eliminarTodasLasCategorias());
+    }
+
 }

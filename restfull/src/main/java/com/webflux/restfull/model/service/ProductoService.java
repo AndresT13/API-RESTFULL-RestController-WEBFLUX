@@ -10,6 +10,8 @@ public interface ProductoService {
 
     public Flux<Producto> findAll();
 
+    public Mono<Producto> findByNombre(String nombre);
+
     public Flux<Producto> findAllConNombreUpperCaseRepeat();
 
     public Mono<Producto> findById(String id);
@@ -26,4 +28,9 @@ public interface ProductoService {
 
     public Mono<Categoria> saveCategoria(Categoria categoria);
 
+    Mono<Void> insertarDatosDePrueba();
+
+    public Mono<Categoria> findByCategoriaByNombre(String nombre);
+
+    public Mono<Void> limpiarDatos();
 }

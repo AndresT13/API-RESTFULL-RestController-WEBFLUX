@@ -15,9 +15,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Categoria {
 
     @Id
-    @NotEmpty
     private String id;
-
+    @NotEmpty
     private String nombre;
 
     public Categoria(String nombre){
